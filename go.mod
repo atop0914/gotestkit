@@ -1,6 +1,6 @@
 module github.com/atop0914/gotestkit
 
-go 1.22.0
+go 1.25.0
 
 require (
 	github.com/testcontainers/testcontainers-go v0.42.0
