@@ -131,7 +131,7 @@ func TestWithForm(t *testing.T) {
 
 func TestResponseString(t *testing.T) {
 	r := NewResponse()
-	r.Write([]byte("hello world"))
+		_, _ = r.Write([]byte("hello world"))
 	if r.String() != "hello world" {
 		t.Errorf("expected hello world, got %s", r.String())
 	}
@@ -139,7 +139,7 @@ func TestResponseString(t *testing.T) {
 
 func TestResponseBytes(t *testing.T) {
 	r := NewResponse()
-	r.Write([]byte("hello"))
+		_, _ = r.Write([]byte("hello"))
 	bytes := r.Bytes()
 	if string(bytes) != "hello" {
 		t.Errorf("expected hello, got %s", string(bytes))
@@ -228,7 +228,7 @@ func TestResponseContentType(t *testing.T) {
 
 func TestResponseJSON(t *testing.T) {
 	r := NewResponse()
-	json.NewEncoder(r.Body).Encode(map[string]string{"name": "test"})
+		_ = json.NewEncoder(r.Body).Encode(map[string]string{"name": "test"})
 	var result map[string]string
 	err := r.JSON(&result)
 	if err != nil {
@@ -241,13 +241,13 @@ func TestResponseJSON(t *testing.T) {
 
 func TestResponseJSONEq(t *testing.T) {
 	r := NewResponse()
-	json.NewEncoder(r.Body).Encode(map[string]string{"name": "test", "age": "25"})
+		_ = json.NewEncoder(r.Body).Encode(map[string]string{"name": "test", "age": "25"})
 	r.JSONEq(&failingTB{}, map[string]string{"name": "test", "age": "25"})
 }
 
 func TestResponseJSONContains(t *testing.T) {
 	r := NewResponse()
-	json.NewEncoder(r.Body).Encode(map[string]interface{}{
+	_ = json.NewEncoder(r.Body).Encode(map[string]interface{}{
 		"user": map[string]string{"name": "test"},
 	})
 	r.JSONContains(&failingTB{}, map[string]string{"name": "test"})
@@ -255,19 +255,19 @@ func TestResponseJSONContains(t *testing.T) {
 
 func TestResponseBodyEquals(t *testing.T) {
 	r := NewResponse()
-	r.Write([]byte("hello world"))
+		_, _ = r.Write([]byte("hello world"))
 	r.BodyEquals(&failingTB{}, "hello world")
 }
 
 func TestResponseBodyContains(t *testing.T) {
 	r := NewResponse()
-	r.Write([]byte("hello world"))
+		_, _ = r.Write([]byte("hello world"))
 	r.BodyContains(&failingTB{}, "world")
 }
 
 func TestResponseXMLEq(t *testing.T) {
 	r := NewResponse()
-	r.Write([]byte(`<user><name>test</name></user>`))
+		_, _ = r.Write([]byte(`<user><name>test</name></user>`))
 	type User struct {
 		Name string `xml:"name"`
 	}
@@ -277,7 +277,7 @@ func TestResponseXMLEq(t *testing.T) {
 func TestServeHTTP(t *testing.T) {
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+		_ = json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
 	})
 
 	resp := ServeHTTP(handler, "GET", "/api/test", nil)
@@ -299,8 +299,8 @@ func TestServeHTTPWithBody(t *testing.T) {
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusCreated)
 		var data map[string]string
-		json.NewDecoder(r.Body).Decode(&data)
-		json.NewEncoder(w).Encode(data)
+		_ = json.NewDecoder(r.Body).Decode(&data)
+		_ = json.NewEncoder(w).Encode(data)
 	})
 
 	resp := ServeHTTP(handler, "POST", "/api/users", map[string]string{"name": "test"})
