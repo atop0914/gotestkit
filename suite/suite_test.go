@@ -4,6 +4,7 @@ import (
 	"context"
 	"reflect"
 	"strings"
+	"sync/atomic"
 	"testing"
 )
 
@@ -12,7 +13,7 @@ type ExampleSuite struct {
 	TestSuite
 	setupCalled    bool
 	teardownCalled bool
-	testCalled     bool
+	testCalled     atomic.Bool
 }
 
 func (s *ExampleSuite) SetupSuite() {
@@ -28,11 +29,11 @@ func (s *ExampleSuite) Setup() {}
 func (s *ExampleSuite) TearDown() {}
 
 func (s *ExampleSuite) TestExample(t *testing.T) {
-	s.testCalled = true
+	s.testCalled.Store(true)
 }
 
 func (s *ExampleSuite) TestExampleAsync(t *testing.T) {
-	s.testCalled = true
+	s.testCalled.Store(true)
 }
 
 func (s *ExampleSuite) TestWithContext(ctx context.Context, t *testing.T) {
@@ -52,7 +53,7 @@ func TestSuiteRunner(t *testing.T) {
 	if !s.teardownCalled {
 		t.Error("TearDownSuite was not called")
 	}
-	if !s.testCalled {
+	if !s.testCalled.Load() {
 		t.Error("TestExample was not called")
 	}
 }
@@ -68,7 +69,7 @@ func TestSubSuiteRunner(t *testing.T) {
 	if !s.teardownCalled {
 		t.Error("TearDownSuite was not called")
 	}
-	if !s.testCalled {
+	if !s.testCalled.Load() {
 		t.Error("TestExample was not called")
 	}
 }
