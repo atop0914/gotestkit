@@ -8,7 +8,7 @@ import (
 
 func TestResult(t *testing.T) {
 	rb := &testing.B{}
-	rb.N = 1000
+	rb.N = 1000 //nolint:staticcheck // intentional: set exact iteration count
 	rb.ResetTimer()
 	rb.StartTimer()
 	time.Sleep(100 * time.Microsecond)

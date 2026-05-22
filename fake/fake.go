@@ -26,12 +26,6 @@ type lockedRand struct {
 	rng *rand.Rand
 }
 
-func (r *lockedRand) read(p []byte) (n int, err error) {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-	n, err = r.rng.Read(p)
-	return n, err
-}
 
 func (r *lockedRand) Intn(n int) int {
 	r.mu.Lock()

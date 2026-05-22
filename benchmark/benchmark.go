@@ -161,7 +161,7 @@ func AutoRun(b *testing.B, f func(), minN, maxN int64) {
 
 	for n := minN; n <= maxN; n *= 10 {
 		b.Run("", func(b *testing.B) {
-			b.N = int(n)
+			b.N = int(n) //nolint:staticcheck // intentional: set exact iteration count
 			Run(b, f)
 		})
 	}
