@@ -1,4 +1,5 @@
 # GoTestKit - Go Testing Toolkit
+[![Go Version](https://img.shields.io/badge/Go-1.22+-00ADD8?logo=go)](https://go.dev/)
 
 A comprehensive testing utilities library for Go that makes writing tests easier, more expressive, and more maintainable.
 
